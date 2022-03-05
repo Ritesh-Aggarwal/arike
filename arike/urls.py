@@ -13,13 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from app.views import (CreateMemberView, CreateUserView, DeleteMemberView, DeleteUserView, DetailUserView,
+from app.views import (CreateDiseaseHistoryView, CreateMemberView, CreateUserView, DeleteDiseaseHistoryView, DeleteMemberView, DeleteUserView, DetailUserView,
                        GenericFacilityCreateView, GenericFacilityDeleteView,
                        GenericFacilityDetailView, GenericFacilityUpdateView,
                        GenericFacilityView, GenericPatientCreateView,
                        GenericPatientDeleteView, GenericPatientDetailView,
-                       GenericPatientUpdateView, GenericPatientView, ListFamilyView, LoginView,
-                       ProfileView, UpdateMemberView, UpdatePasswordView, UpdateProfileView,
+                       GenericPatientUpdateView, GenericPatientView, ListDiseaseHistoryView, ListFamilyView, LoginView,
+                       ProfileView, UpdateDiseaseHistoryView, UpdateMemberView, UpdatePasswordView, UpdateProfileView,
                        UpdateUserView, UsersListView)
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
@@ -57,6 +57,13 @@ urlpatterns += [
 urlpatterns += [
     path('patient/<pk>/family-details',ListFamilyView.as_view(), name='patient'),
     path('patient/<int:patient>/add-member',CreateMemberView.as_view(), name='patient'),
-    path('patient/<pk>/update-member',UpdateMemberView.as_view(), name='patient'),
+    path('update-member/<pk>',UpdateMemberView.as_view(), name='patient'),
     path('delete-member/<pk>',DeleteMemberView.as_view(), name='patient'),
+]
+
+urlpatterns += [
+    path('patient/<pk>/disease-history',ListDiseaseHistoryView.as_view(), name='patient'),
+    path('patient/<int:patient>/add-disease',CreateDiseaseHistoryView.as_view(), name='patient'),
+    path('update-disease/<pk>',UpdateDiseaseHistoryView.as_view(), name='patient'),
+    path('delete-disease/<pk>',DeleteDiseaseHistoryView.as_view(), name='patient'),
 ]

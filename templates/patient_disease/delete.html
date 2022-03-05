@@ -1,0 +1,20 @@
+{% extends "dashboard.html" %}
+{%block page_content%}
+<div class="w-3/5 mx-auto">
+    <div class="font-semibold text-3xl mb-6 truncate pb-2">
+        Delete disease history
+    </div>
+    <div class="text-xl mb-4">
+        <div>Disease "{{object.disease}}" will be deleted from patient's record.
+        </div>
+        <div class="">Are you sure ? Action can not be reversed.</div>
+    </div>
+    <div class="flex">
+        <a href="/patients" class="border-2 rounded-md border-black  px-6 py-1 mr-4">Cancel</a>
+        <form method="post">{%csrf_token%}
+            <input class="cursor-pointer border-2 rounded-md border-black bg-black text-white px-6 py-1" type="submit"
+                value="Delete">
+        </form>
+    </div>
+</div>
+{%endblock%}

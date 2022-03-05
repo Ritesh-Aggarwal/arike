@@ -156,13 +156,23 @@ class Disease(models.Model):
     name = models.CharField(max_length=255)
     icds_code = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.name
+
 class PatientDisease(models.Model):
     patient = models.ForeignKey(
-        Patient, on_delete=models.CASCADE, null=False, blank=False
+        Patient, on_delete=models.CASCADE, null=True, blank=True
     )
     disease = models.ForeignKey(
         Disease, on_delete=models.CASCADE, null=False, blank=False
     )
     note = models.CharField(max_length=255, null=True,blank=True)
+    # treatment
+    investigated_by = models.ForeignKey(CustomUser,on_delete=models.PROTECT,null=True,blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def pretty_date(self):
+        return self.created_at.strftime("%d %B %Y")
+
 
 

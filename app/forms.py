@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 
 from app.choices import FACILITY_CHOICES, GENDER_CHOICES
 
-from app.models import CustomUser, Facility, FamilyDetail, Patient, Ward
+from app.models import CustomUser, Disease, Facility, FamilyDetail, Patient, PatientDisease, Ward
 
 
 # from .models import CustomUser, Facility
@@ -74,6 +74,18 @@ class FamilyCreateForm(forms.ModelForm):
         model = FamilyDetail
         fields = '__all__'
         exclude = ('patient',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'focus:outline-none '
+
+class DiseaseHistoryCreateForm(forms.ModelForm):
+    disease = forms.ModelChoiceField(label="Disease",queryset=Disease.objects.all(),empty_label="Select Disease")
+
+    class Meta:
+        model = PatientDisease
+        exclude=('patient','investigated_by',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
