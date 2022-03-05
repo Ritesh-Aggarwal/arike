@@ -1,17 +1,19 @@
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
-from django.views import View
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.shortcuts import render
+from django.views import View
 from django.views.generic.detail import DetailView
-from django.contrib.auth.forms import PasswordChangeForm
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.list import ListView
 
-from app.forms import CustomUserCreationForm, CustomUserUpdateForm, DiseaseHistoryCreateForm, FacilityCreateForm, FamilyCreateForm, PatientCreateForm
-
-
-from app.models import CustomUser, Facility, FamilyDetail, Patient, PatientDisease
+from app.forms import (CustomUserCreationForm, CustomUserUpdateForm,
+                       DiseaseHistoryCreateForm, FacilityCreateForm,
+                       FamilyCreateForm, PatientCreateForm,
+                       TreatementCreateForm)
+from app.models import (CustomUser, Facility, FamilyDetail, Patient,
+                        PatientDisease,  Treatment)
 
 
 # Create your views here.
@@ -250,4 +252,57 @@ class UpdateDiseaseHistoryView(UpdateView):
     form_class = DiseaseHistoryCreateForm
     template_name = "patient_disease/update.html"
     success_url = "/patients"
+########################################################################################
+########################################################################################
+
+class ListTreatmentView(ListView):
+    model = Treatment
+    template_name = "treatment/list.html"
+    context_object_name = "objects"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs["pk"]
+        context['patient'] = Patient.objects.get(pk=pk)
+        return context
+
+    def get_queryset(self):
+        pk = self.kwargs["pk"]
+        qs = Treatment.objects.filter(patient=pk)
+        return qs
+
+
+class CreateTreatmentView(CreateView):
+    model = Treatment
+    form_class = TreatementCreateForm
+    template_name = "treatment/create.html"
+
+    def get_success_url(self):
+        pk = self.kwargs["patient"]
+        return f"/patient/{pk}/treatments"
+
+    def form_valid(self, form):
+        self.object = form.save()
+        patient = self.kwargs["patient"]
+        self.object.patient = Patient.objects.get(pk=patient)
+        self.object.given_by = self.request.user
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+class DeleteTreatmentView(DeleteView):
+    model = Treatment
+    template_name = "treatment/delete.html"
+    success_url = "/patients"
+
+class UpdateTreatmentView(UpdateView):
+    model = Treatment
+    form_class = TreatementCreateForm
+    template_name = "treatment/update.html"
+    success_url = "/patients"
+
+########################################################################################
+########################################################################################
+
+
+
 ########################################################################################

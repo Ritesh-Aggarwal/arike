@@ -4,8 +4,8 @@ from django.contrib.auth.models import AbstractUser, UserManager
 from django.core.validators import RegexValidator
 from django.db import models
 
-from app.choices import (FACILITY_CHOICES, GENDER_CHOICES, LOCAL_BODY_CHOICES, RELATION_CHOICES,
-                         REVERSE_LSG_CHOICES)
+from app.choices import (CARE_TYPES, FACILITY_CHOICES, GENDER_CHOICES, LOCAL_BODY_CHOICES, RELATION_CHOICES,
+                         REVERSE_LSG_CHOICES, SUB_CARE_TYPES)
 
 phone_number_regex = RegexValidator(
     regex=r"^((\+91|91|0)[\- ]{0,1})?[456789]\d{9}$",
@@ -174,5 +174,27 @@ class PatientDisease(models.Model):
     def pretty_date(self):
         return self.created_at.strftime("%d %B %Y")
 
+class Treatment(models.Model):
+    care_type = models.IntegerField(choices=CARE_TYPES)
+    # multiselect in frontend
+    sub_care_type = models.CharField(max_length=500,null=True,blank=True)
+    description = models.CharField(max_length=255)
+    patient = models.ForeignKey(
+        Patient, on_delete=models.CASCADE, null=True, blank=True
+    )
+    given_by = models.ForeignKey(CustomUser,on_delete=models.PROTECT,null=True,blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    last_updated = models.DateTimeField(auto_now=True, blank=True)
+
+    def pretty_date(self):
+        return {"last":self.last_updated.strftime("%d %B %Y"),"created":self.created_at.strftime("%d %B %Y")}
+
+    # def get_sub_care_type(self):
+    #     output = ""
+    #     s = self.sub_care_type[1:-1].replace("'","").split(',')
+    #     for choice in s:
+    #         output += SUB_CARE_TYPES[int(choice)][1]
+    #         output += ","
+    #     return f"{output[:-1]}"
 
 

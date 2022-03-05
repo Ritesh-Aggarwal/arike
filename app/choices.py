@@ -123,12 +123,22 @@ TREATMENT_GROUPS = [
 ]
 
 def care_types(choices):
-    output = []
-    i=0
-    for choice in choices:
-        output.append((i,choice[0]))
-        i+=1
-    return output
+  output = []
+  i=0
+  for choice in choices:
+      output.append((i+1,choice[0]))
+      i+=1
+  return output
+
+def sub_care_types(choices):
+  output = []
+  i=0
+  for choice in choices:
+    for type in choice[1]:
+      output.append((i+1,type))
+  return output
+
+SUB_CARE_TYPES = sub_care_types(TREATMENT_GROUPS)
 CARE_TYPES = care_types(TREATMENT_GROUPS)
 REVERSE_CARE_TYPE = reverse_choices(TREATMENT_GROUPS)
 
