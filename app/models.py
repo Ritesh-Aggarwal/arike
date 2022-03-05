@@ -149,11 +149,20 @@ class FamilyDetail(models.Model):
     relation = models.IntegerField(choices=RELATION_CHOICES, blank=False)
     is_primary = models.BooleanField(default=False)
     patient = models.ForeignKey(
-        Patient, on_delete=models.PROTECT, null=True, blank=True
+        Patient, on_delete=models.CASCADE, null=True, blank=True
     )
 
 class Disease(models.Model):
     name = models.CharField(max_length=255)
     icds_code = models.CharField(max_length=255)
+
+class PatientDisease(models.Model):
+    patient = models.ForeignKey(
+        Patient, on_delete=models.CASCADE, null=False, blank=False
+    )
+    disease = models.ForeignKey(
+        Disease, on_delete=models.CASCADE, null=False, blank=False
+    )
+    note = models.CharField(max_length=255, null=True,blank=True)
 
 
