@@ -152,4 +152,8 @@ class FamilyDetail(models.Model):
         Patient, on_delete=models.PROTECT, null=True, blank=True
     )
 
+class Disease(models.Model):
+    name = models.CharField(max_length=255)
+    icds_code = models.CharField(max_length=255)
+
 
