@@ -1,0 +1,20 @@
+{% extends "dashboard.html" %}
+{%block page_content%}
+<div class="flex justify-between items-center mb-6">
+        <div class="text-3xl font-semibold ">Patients</div>
+        <a href="/add-patient" class="border-2 rounded-md border-black bg-black text-white px-6 py-1 ">Add</a>
+</div>
+<div class="grid grid-cols-3 gap-4">
+        {%for patient in patients %}
+        <a href="/patient/{{patient.id}}" class="rounded-lg bg-white p-4">
+                <div class="font-bold">
+                        {{patient}}
+                </div>
+                <div class="text-gray-600 h-12 overflow-ellipsis overflow-hidden">{{patient.address}},
+                        {{patient.landmark}}</div>
+                <div class="font-semibold">{{patient.calculate_age}} Years Old</div>
+                <div class="font-semibold text-blue-600">{{patient.phone_number}}</div>
+        </a>
+        {%endfor%}
+</div>
+{%endblock%}

@@ -1,0 +1,69 @@
+{% extends "dashboard.html" %}
+{%block page_content%}
+<div class="text-3xl font-bold ">{{patient.full_name}}</div>
+<div class="flex justify-between items-center my-4">
+    <div class="text-xl font-semibold ">Personal Information</div>
+    <div class="flex justify-between items-center">
+
+        <a href="/delete-patient/{{patient.id}}" class="border-2 rounded-md border-black px-6 py-1 mr-4">Delete</a>
+        <a href="/update-patient/{{patient.id}}"
+            class="border-2 rounded-md border-black bg-black text-white px-6 py-1 ">Edit</a>
+    </div>
+</div>
+<div class="grid grid-cols-3 gap-4">
+    <div class="col-span-2 rounded-lg bg-white p-4">
+        <div class="font-bold">
+            {{patient.full_name}}
+        </div>
+        <div class="text-gray-600 h-12 overflow-ellipsis overflow-hidden">{{patient.address}},
+            {{patient.landmark}}</div>
+
+        <div class="grid grid-cols-2 gap-2">
+            <div class="font-semibold ">Phone Number <div class="text-blue-600 font-normal">{{patient.phone_number}}
+                </div>
+            </div>
+            <div class="font-semibold ">Emergency Phone Number <div class="text-blue-600 font-normal">
+                    {{patient.emergency_phone_number}}</div>
+            </div>
+            <div class="font-semibold ">Gender<div class="font-normal">
+                    {{patient.get_gender_display}}</div>
+            </div>
+            <div class="font-semibold ">Facility<div class="font-normal">
+                    {{patient.facility}}</div>
+            </div>
+            <div class="font-semibold ">Last Visit<div class="font-normal">
+                    xxxx</div>
+            </div>
+            <div class="font-semibold ">Next Visit<div class="font-normal">
+                    xxxxx</div>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col justify-between">
+        <a href="/patient/{{patient.id}}"
+            class="mb-4 h-1/2 w-full rounded-lg bg-white p-4 flex justify-center items-center  ">
+            <div class="font-bold">
+                Visits
+            </div>
+        </a>
+        <a href="/patient/{{patient.id}}"
+            class="h-1/2 w-full rounded-lg bg-white p-4 flex justify-center items-center  ">
+            <div class="font-bold">
+                Treatments
+            </div>
+        </a>
+
+    </div>
+    <a href="/family-details/{{patient.id}}"
+        class="h-32 w-full rounded-lg bg-white p-4 flex justify-center items-center  ">
+        <div class="font-bold">
+            Family Details
+        </div>
+    </a>
+    <a href="/patient/{{patient.id}}" class="h-32 w-full rounded-lg bg-white p-4 flex justify-center items-center  ">
+        <div class="font-bold">
+            Disease History
+        </div>
+    </a>
+</div>
+{%endblock%}

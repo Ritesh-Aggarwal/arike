@@ -1,0 +1,29 @@
+{% extends "dashboard.html" %}
+{%block page_content%}
+<div class="flex justify-between items-center mb-6">
+    <div class="text-3xl font-semibold ">Users</div>
+    <a href="/add-user" class="border-2 rounded-md border-black bg-black text-white px-6 py-1 ">Add</a>
+</div>
+<div class="grid grid-cols-3 gap-4">
+    {%for user in users %}
+    <div class="">
+        <div class="border-0 bg-white rounded-t-lg p-4 flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+                <div class="text-lg font-semibold">{{user.username}}</div>
+                <div class="rounded-full py-1 px-6 bg-gray-200">{{user.get_role_display}}</div>
+            </div>
+            <div class="text-gray-400 leading-tight">{{user.email}}
+            </div>
+            <div class="text-gray-400 leading-tight">{{user.district}}
+            </div>
+        </div>
+        <div class="rounded-b-lg  font-semibold bg-white p-4 border-0 mt-0.5">
+            <div class="flex justify-between items-center">
+                {{user.phone_number}}
+                <a href="/user/{{user.id}}" class="border-2 rounded-md border-black px-6 py-1">View</a>
+            </div>
+        </div>
+    </div>
+    {%endfor%}
+</div>
+{%endblock%}

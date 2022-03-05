@@ -1,0 +1,112 @@
+{% extends "dashboard.html" %}
+{%block page_content%}
+<div class="w-3/5 mx-auto">
+    <div class="font-semibold text-3xl mb-8">Add Patient</div>
+    <form method="post">
+        {{form.non_field_errors}}
+        {%csrf_token%}
+        <div class="mb-4 border-0 bg-white rounded-lg flex flex-col p-1 pl-4">
+            <div class="text-gray-600">{{form.full_name.label}}</div>
+            {{form.full_name}}
+            {%if form.full_name.errors%}
+            <ol class="list-disc ml-6 text-sm text-red-500">
+                {%for error in form.full_name.errors %}
+                <li>
+                    {{error|escape}}
+                </li>
+                {%endfor%}
+            </ol>
+            {%endif%}
+        </div>
+        <div class="flex mb-4">
+            <div class="w-1/2 border-0 bg-white rounded-lg flex flex-col p-1 pl-4 mr-4">
+                <div class="text-gray-600">{{form.email.label}}</div>
+                {{form.email}}
+                {%if form.email.errors%}
+                <ol class="list-disc ml-6 text-sm text-red-500">
+                    {%for error in form.email.errors %}
+                    <li>
+                        {{error|escape}}
+                    </li>
+                    {%endfor%}
+                </ol>
+                {%endif%}
+            </div>
+            <div class="w-1/2 border-0 bg-white rounded-lg flex flex-col p-1 pl-4">
+                <div class="text-gray-600">{{form.date_of_birth.label}}</div>
+                {{form.date_of_birth}}
+                {%if form.date_of_birth.errors%}
+                <ol class="list-disc ml-6 text-sm text-red-500">
+                    {%for error in form.date_of_birth.errors %}
+                    <li>
+                        {{error|escape}}
+                    </li>
+                    {%endfor%}
+                </ol>
+                {%endif%}
+            </div>
+        </div>
+        <div class="flex mb-4">
+            <div class="w-1/2 border-0 bg-white rounded-lg flex flex-col p-1 pl-4 mr-4">
+                <div class="text-gray-600">{{form.phone_number.label}}</div>
+                {{form.phone_number}}
+                {%if form.phone_number.errors%}
+                <ol class="list-disc ml-6 text-sm text-red-500">
+                    {%for error in form.phone_number.errors %}
+                    <li>
+                        {{error|escape}}
+                    </li>
+                    {%endfor%}
+                </ol>
+                {%endif%}
+            </div>
+            <div class="w-1/2 border-0 bg-white rounded-lg flex flex-col p-1 pl-4">
+                <div class="text-gray-600">{{form.emergency_phone_number.label}}</div>
+                {{form.emergency_phone_number}}
+                {%if form.emergency_phone_number.errors%}
+                <ol class="list-disc ml-6 text-sm text-red-500">
+                    {%for error in form.emergency_phone_number.errors %}
+                    <li>
+                        {{error|escape}}
+                    </li>
+                    {%endfor%}
+                </ol>
+                {%endif%}
+            </div>
+        </div>
+        <div class="mb-4 border-0 bg-white rounded-lg flex flex-col p-1 pl-4">
+            <div class="text-gray-600">{{form.address.label}}</div>
+            {{form.address}}
+            {{form.address.errors}}
+        </div>
+        <div class="mb-4 border-0 bg-white rounded-lg flex flex-col p-1 pl-4">
+            <div class="text-gray-600">{{form.landmark.label}}</div>
+            {{form.landmark}}
+            {{form.landmark.errors}}
+        </div>
+        <div class="flex mb-4">
+            <div class="w-1/2 border-0 bg-white rounded-lg flex flex-col p-1 pl-4 mr-4">
+                {{form.ward}}
+            </div>
+            <div class="w-1/2 border-0 bg-white rounded-lg flex flex-col p-1 pl-4">
+                {{form.facility}}
+            </div>
+        </div>
+        <div class="flex flex-col mb-4">
+            <div class="text-xl">{{form.gender.label}}</div>
+            <div class="mt-2">
+                {% for choice in form.gender %}
+                <span class="mr-2">{{ choice.tag }}</span>
+                <span class="mr-4">
+                    {{ choice.choice_label }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+        <button type="submit"
+            class="mt-4 w-1/3 text-center bg-gray-500 text-white rounded-md py-2 hover:bg-gray-400 transition ease-in-out duration-300">
+            Create</button>
+    </form>
+</div>
+</div>
+{%endblock%}

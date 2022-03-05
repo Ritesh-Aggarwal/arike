@@ -1,0 +1,9 @@
+{% extends "dashboard.html" %}
+{%block page_content%}
+<div class="w-4/5 mx-auto">
+    <div class="py-8 border-b w-full flex flex-col justify-center items-center">
+        <div class="rounded-full border h-20 w-20 bg-black"></div>
+        <div class="font-semibold text-xl text-center my-2">{{user.username}}</div>
+        <div class="rounded-full py-1 px-6 bg-gray-800 text-white">{{user.get_role_display}}</div>
+    </div>
+    {%endblock%}

@@ -1,0 +1,65 @@
+{% extends "dashboard.html" %}
+{%block page_content%}
+<div class="flex justify-between items-center mb-6">
+        <div class="text-3xl font-semibold ">Family Details</div>
+        <a href="/add-member/{{patient.id}}"
+                class="border-2 rounded-md border-black bg-black text-white px-6 py-1 ">Add</a>
+</div>
+<div class="font-semibold text-xl">{{patient.full_name}}</div>
+<div class="text-gray-500 mb-4">{{patient.address}}</div>
+<div class="grid grid-cols-2 gap-4">
+        {%for object in objects %}
+        <div class="overflow-clip">
+                <div class="border-0 bg-white rounded-t-lg p-4 flex flex-col justify-between">
+                        <div class="flex items-center justify-between">
+                                <div class="text-lg font-semibold">{{object.full_name}}</div>
+                                <div class="rounded-full py-1 px-6 bg-gray-200">{{object.get_relation_display}}</div>
+                        </div>
+                        <div class="text-gray-400 leading-tight">{{object.address}}
+                        </div>
+                        <div class="mt-2 grid grid-cols-2 gap-2">
+                                <div class="font-semibold text-blue-600 font-normal">
+                                        {{object.phone_number}}
+                                </div>
+                                <div class="font-semibold text-blue-600 font-normal">
+                                        {{object.email}}
+                                </div>
+                                <div class="font-semibold">
+                                        Birth Date
+                                        <div class="font-normal">
+                                                {{object.date_of_birth}}
+                                        </div>
+                                </div>
+                                <div class="font-semibold">
+                                        Occupation
+                                        <div class="font-normal">
+                                                {{object.occupation}}
+                                        </div>
+                                </div>
+                                <div class="font-semibold">
+                                        Education
+                                        <div class="font-normal">
+                                                {{object.education}}
+                                        </div>
+                                </div>
+                                <div class="font-semibold">
+                                        Remark
+                                        <div class="font-normal">
+                                                {{object.remarks}}
+                                        </div>
+                                </div>
+
+                        </div>
+                </div>
+                <div class="rounded-b-lg  font-semibold bg-white p-4 border-0 mt-0.5">
+                        <div class="flex justify-end items-center">
+                                <a href="/delete-member/{{object.id}}"
+                                        class="border-2 mr-4 rounded-md border-black px-6 py-1">Delete</a>
+                                <a href="/update-member/{{object.id}}"
+                                        class="border-2 rounded-md border-black bg-black text-white px-6 py-1">Edit</a>
+                        </div>
+                </div>
+        </div>
+        {%endfor%}
+</div>
+{%endblock%}

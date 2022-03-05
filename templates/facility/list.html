@@ -1,0 +1,32 @@
+{% extends "dashboard.html" %}
+{%block page_content%}
+<div class="flex justify-between items-center mb-6">
+        <div class="text-3xl font-semibold ">Facility</div>
+        <a href="/add-facilities" class="border-2 rounded-md border-black bg-black text-white px-6 py-1 ">Add</a>
+</div>
+<div class="grid grid-cols-2 gap-4">
+        {%for fac in facs %}
+        <div class="">
+                <div class="border-0 bg-white rounded-t-lg p-4 h-36 flex flex-col justify-between">
+                        <div class="flex items-center justify-between">
+                                <div class="text-lg font-semibold">{{fac.name}}</div>
+                                <div class="rounded-full py-1 px-6 bg-gray-200">{{fac.get_kind_display}}</div>
+                        </div>
+                        <div class="text-gray-400 leading-tight">{{fac.ward.lsg_body}},<div>
+                                        {{fac.ward.lsg_body.district}}
+                                </div>
+                        </div>
+                        <div class="font-semibold">{{fac.get_pincode_area}}</div>
+                </div>
+                <div class="rounded-b-lg  font-semibold bg-white p-4 border-0 mt-0.5">
+                        <div class="flex justify-between items-center">
+
+                                {{fac.phone_number}}
+                                <a href="/facility/{{fac.id}}"
+                                        class="border-2 rounded-md border-black px-6 py-1">View</a>
+                        </div>
+                </div>
+        </div>
+        {%endfor%}
+</div>
+{%endblock%}
