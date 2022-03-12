@@ -35,7 +35,7 @@ DATABASES = {
 }
 DATABASES['default'].update(db_from_env)
 
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1",]
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1","arike-app.herokuapp.com"]
 
 
 # Application definition
