@@ -55,7 +55,7 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('patient/<pk>/family-details',ListFamilyView.as_view(), name='patient'),
+    path('patient/<int:patient>/family-details',ListFamilyView.as_view(), name='patient'),
     path('patient/<int:patient>/add-member',CreateMemberView.as_view(), name='patient'),
     path('update-member/<pk>',UpdateMemberView.as_view(), name='patient'),
     path('delete-member/<pk>',DeleteMemberView.as_view(), name='patient'),

@@ -4,7 +4,8 @@ from django.contrib.auth.models import AbstractUser, UserManager
 from django.core.validators import RegexValidator
 from django.db import models
 
-from app.choices import (CARE_TYPES, FACILITY_CHOICES, GENDER_CHOICES, LOCAL_BODY_CHOICES, RELATION_CHOICES,
+from app.choices import (CARE_TYPES, FACILITY_CHOICES, GENDER_CHOICES,
+                         LOCAL_BODY_CHOICES, RELATION_CHOICES,
                          REVERSE_LSG_CHOICES, SUB_CARE_TYPES)
 
 phone_number_regex = RegexValidator(
@@ -196,5 +197,4 @@ class Treatment(models.Model):
     #         output += SUB_CARE_TYPES[int(choice)][1]
     #         output += ","
     #     return f"{output[:-1]}"
-
 

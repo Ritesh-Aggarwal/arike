@@ -168,12 +168,12 @@ class ListFamilyView(ListView):
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        pk = self.kwargs["pk"]
+        pk = self.kwargs["patient"]
         context['patient'] = Patient.objects.get(pk=pk)
         return context
 
     def get_queryset(self):
-        pk = self.kwargs["pk"]
+        pk = self.kwargs["patient"]
         qs = FamilyDetail.objects.filter(patient=pk)
         return qs
 
