@@ -321,28 +321,19 @@ class ListVisitHistoryView(ListView):
 ########################################################################################
 
 class ListScheduleView(ListView):
-    model = VisitSchedule
+    model = Patient
     template_name = "visit/list.html"
     context_object_name = "objects"
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        r = []
-        user = self.request.user
-        p_qs = VisitSchedule.objects.filter(scheduled_by=user).values('patient_id').distinct()
-        for i in p_qs:
-            r.append(i['patient_id'])
-        context['treatments'] = Treatment.objects.filter(patient_id__in=r)
+        context['treatments'] = Treatment.objects.all()
         return context
 
-    def get_queryset(self):
-        user = self.request.user
-        r = []
-        p_qs = VisitSchedule.objects.filter(scheduled_by=user).values('patient_id').distinct()
-        for i in p_qs:
-            r.append(i['patient_id'])
-        qs = Patient.objects.filter(id__in=r)
-        return qs
+    # def get_queryset(self):
+    #TODO: filter acc. to assigned patients and role
+        # qs = Patient.objects.filter()
+        # return qs
 
 class AgendaView(ListView):
     model = VisitSchedule
@@ -370,13 +361,23 @@ class CreateVisitSchedule(CreateView):
     success_url = '/schedule'
 
     def form_valid(self, form):
+        pk = self.kwargs["pk"]
+        patient = Patient.objects.get(pk=pk)
         self.object = form.save()
+        self.object.patient = patient
         self.object.scheduled_by = self.request.user
         details = VisitDetails.objects.create(General_Random_Blood_Sugar=0)
         self.object.visit_details = details
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
-
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs["pk"]
+        patient = Patient.objects.get(pk=pk)
+        context['patient'] = patient
+        return context
+        
 class DeleteVisitView(DeleteView):
     model = VisitSchedule
     template_name = "visit/delete.html"

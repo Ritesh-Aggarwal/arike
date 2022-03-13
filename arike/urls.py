@@ -84,7 +84,7 @@ urlpatterns += [
 
 urlpatterns += [
     path('schedule',ListScheduleView.as_view(), name='schedule'),
-    path('schedule-visit',CreateVisitSchedule.as_view(), name='schedule'),
+    path('patient/<pk>/schedule-visit',CreateVisitSchedule.as_view(), name='schedule'),
     path('agenda',AgendaView.as_view(), name='schedule'),
     path('delete-visit/<pk>',DeleteVisitView.as_view(), name='schedule'),
     path('patient/visit/<pk>',PatientVisitView.as_view(), name='schedule'),

@@ -217,7 +217,7 @@ class VisitSchedule(models.Model):
     visit_at = models.DateTimeField()
     duration = models.DurationField()
     patient = models.ForeignKey(
-        Patient, on_delete=models.CASCADE, null=False, blank=False
+        Patient, on_delete=models.CASCADE, null=True, blank=True
     )
     scheduled_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     visit_details = models.ForeignKey(

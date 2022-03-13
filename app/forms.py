@@ -114,7 +114,7 @@ class VisitScheduleCreateForm(forms.ModelForm):
                            (attrs={'placeholder':'hh:mm:ss'}))
     class Meta:
         model = VisitSchedule
-        exclude = ('scheduled_by','visit_details',)
+        exclude = ('scheduled_by','visit_details','patient',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

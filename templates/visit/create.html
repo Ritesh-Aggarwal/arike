@@ -2,6 +2,8 @@
 {%block page_content%}
 <div class="w-3/5 mx-auto">
     <div class="font-semibold text-3xl mb-8">Schedule visit</div>
+    <div class="font-semibold text-xl">{{patient.full_name}}</div>
+    <div class="text-gray-500 mb-4">{{patient.address}}</div>
     <form method="post">
         {{form.non_field_errors}}
         {%csrf_token%}
