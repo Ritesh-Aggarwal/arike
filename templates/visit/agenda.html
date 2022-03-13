@@ -1,0 +1,48 @@
+{% extends "dashboard.html" %}
+{%block page_content%}
+<div class="flex justify-between items-center mb-6">
+        <div class="text-3xl font-semibold ">Agenda</div>
+        <a href="/schedule-visit" class="border-2 rounded-md border-black bg-black text-white px-6 py-1 ">New</a>
+</div>
+{% regroup objects by visit_at as objects_list %}
+
+<div class="">
+        {% for visits in objects_list %}
+        <div class="mb-2 text-xl font-semibold flex">
+                {%if today == visits.grouper|date%}
+                <div>Today</div>
+                {%elif tom == visits.grouper|date%}
+                <div>Tommorow</div>
+                {%else%}
+                <div> {{ visits.grouper|date }}</div>
+                {%endif%}
+                <span class="ml-4 text-gray-500">{{visits.list|length}} visits</span>
+
+        </div>
+        <div class="mb-4 grid grid-cols-3 gap-4">
+                {% for obj in visits.list %}
+                <div class="">
+                        <div class="rounded-t-lg bg-white p-4">
+                                <div class="font-bold">
+                                        {{obj.patient}}
+                                </div>
+                                <div class="text-gray-600 h-12 overflow-ellipsis overflow-hidden">
+                                        {{obj.patient.address}},
+                                        {{obj.patient.landmark}}</div>
+                                <div class="font-semibold">{{obj.patient.calculate_age}} Years Old</div>
+                                <div class="font-semibold text-blue-600">{{obj.patient.phone_number}}</div>
+                        </div>
+                        <div class="rounded-b-lg  font-semibold bg-white p-4 border-0 mt-0.5">
+                                <div class="flex justify-around items-center">
+                                        <a href="/delete-visit/{{obj.id}}"
+                                                class="border-2 mr-4 rounded-md border-black px-6 py-1">Unschedule</a>
+                                        <a href="#"
+                                                class="border-2 rounded-md border-black bg-black text-white px-6 py-1">Visit</a>
+                                </div>
+                        </div>
+                </div>
+                {% endfor %}
+        </div>
+        {% endfor %}
+</div>
+{%endblock%}

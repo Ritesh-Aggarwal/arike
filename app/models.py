@@ -198,3 +198,10 @@ class Treatment(models.Model):
     #         output += ","
     #     return f"{output[:-1]}"
 
+class VisitSchedule(models.Model):
+    visit_at = models.DateTimeField()
+    duration = models.DurationField()
+    patient = models.ForeignKey(
+        Patient, on_delete=models.CASCADE, null=False, blank=False
+    )
+    scheduled_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)

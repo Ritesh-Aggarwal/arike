@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
@@ -11,9 +12,9 @@ from django.views.generic.list import ListView
 from app.forms import (CustomUserCreationForm, CustomUserUpdateForm,
                        DiseaseHistoryCreateForm, FacilityCreateForm,
                        FamilyCreateForm, PatientCreateForm,
-                       TreatementCreateForm)
+                       TreatementCreateForm, VisitScheduleCreateForm)
 from app.models import (CustomUser, Facility, FamilyDetail, Patient,
-                        PatientDisease,  Treatment)
+                        PatientDisease,  Treatment, VisitSchedule)
 
 
 # Create your views here.
@@ -300,9 +301,83 @@ class UpdateTreatmentView(UpdateView):
     template_name = "treatment/update.html"
     success_url = "/patients"
 
+class ListVisitHistoryView(ListView):
+    model = VisitSchedule
+    template_name = "patient/visits.html"
+    context_object_name = "objects"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs["pk"]
+        context['patient'] = Patient.objects.get(pk=pk)
+        return context
+        
+    def get_queryset(self):
+        pk = self.kwargs["pk"]
+        qs = VisitSchedule.objects.filter(patient=pk)
+        return qs
+
 ########################################################################################
 ########################################################################################
 
+class ListScheduleView(ListView):
+    model = VisitSchedule
+    template_name = "visit/list.html"
+    context_object_name = "objects"
 
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        r = []
+        user = self.request.user
+        p_qs = VisitSchedule.objects.filter(scheduled_by=user).values('patient_id').distinct()
+        for i in p_qs:
+            r.append(i['patient_id'])
+        context['treatments'] = Treatment.objects.filter(patient_id__in=r)
+        return context
+
+    def get_queryset(self):
+        user = self.request.user
+        r = []
+        p_qs = VisitSchedule.objects.filter(scheduled_by=user).values('patient_id').distinct()
+        for i in p_qs:
+            r.append(i['patient_id'])
+        qs = Patient.objects.filter(id__in=r)
+        return qs
+
+class AgendaView(ListView):
+    model = VisitSchedule
+    template_name = "visit/agenda.html"
+    context_object_name = "objects"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        today = datetime.now()
+        tommorow = datetime.now() + timedelta(days=1)
+        context['today'] = today.strftime("%B %d, %Y")
+        context['tom'] = tommorow.strftime("%B %d, %Y")
+        return context
+
+    def get_queryset(self):
+        user = self.request.user
+        qs = VisitSchedule.objects.filter(scheduled_by=user).order_by('visit_at')
+        return qs
+
+
+class CreateVisitSchedule(CreateView):
+    model = VisitSchedule
+    form_class = VisitScheduleCreateForm
+    template_name = "visit/create.html"
+    success_url = '/schedule'
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.scheduled_by = self.request.user
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+class DeleteVisitView(DeleteView):
+    model = VisitSchedule
+    template_name = "visit/delete.html"
+    success_url = "/agenda"
 
 ########################################################################################

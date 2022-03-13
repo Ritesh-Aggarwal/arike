@@ -20,17 +20,22 @@
                 {%else%}
                 <a href="/users" class=" p-3 rounded-lg ">Users</a>
                 {% endif %}
+                {% if request.resolver_match.url_name == 'schedule' %}
+                <a href="/schedule" class="p-3 rounded-lg text-white bg-black">Schedule</a>
+                {%else%}
+                <a href="/schedule" class=" p-3 rounded-lg ">Schedule</a>
+                {% endif %}
             </div>
         </div>
         <div class="border-t flex border-gray-300">
             <div class=" mt-2 mr-4 rounded-full border h-12 w-12 bg-black"></div>
             <div class="flex flex-col">
                 <a href="/profile" class="mt-2 font-semibold">{{request.user}}</a>
-                <a href="" class="text-blue-500">logout</a>
+                <a href="/logout" class="text-blue-500">logout</a>
             </div>
         </div>
     </div>
-    <div class="w-4/5 p-4">
+    <div class="w-4/5 p-4 overflow-y-auto h-screen">
         <div class="">
             {%block page_content%}
             {%endblock%}

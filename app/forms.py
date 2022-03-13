@@ -1,9 +1,10 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 
-from app.choices import FACILITY_CHOICES, GENDER_CHOICES, REVERSE_CARE_TYPE, SUB_CARE_TYPES
-
-from app.models import CustomUser, Disease, Facility, FamilyDetail, Patient, PatientDisease, Treatment, Ward
+from app.choices import (FACILITY_CHOICES, GENDER_CHOICES, REVERSE_CARE_TYPE,
+                         SUB_CARE_TYPES)
+from app.models import (CustomUser, Disease, Facility, FamilyDetail, Patient,
+                        PatientDisease, Treatment, VisitSchedule, Ward)
 
 
 # from .models import CustomUser, Facility
@@ -105,3 +106,17 @@ class TreatementCreateForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'focus:outline-none '
         # self.fields['sub_care_type'].choices = SUB_CARE_TYPES
+
+class VisitScheduleCreateForm(forms.ModelForm):
+    visit_at = forms.DateTimeField(widget=forms.SelectDateWidget(empty_label="Nothing"))
+    duration = forms.DurationField(
+                           widget= forms.TextInput
+                           (attrs={'placeholder':'hh:mm:ss'}))
+    class Meta:
+        model = VisitSchedule
+        exclude = ('scheduled_by',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'focus:outline-none w-full'

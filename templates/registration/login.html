@@ -1,17 +1,25 @@
 {% extends "base.html" %}
 {%block content%}
-<div class="flex w-full h-full">
-    <div class="w-1/2 flex justify-center items-center">
-        Arike
+<div class="flex w-full h-screen">
+    <div class="w-1/2  bg-black flex justify-center items-center">
+        <div class="flex flex-col">
+            <div class="text-5xl font-bold text-white">
+                Arike
+            </div>
+            <div class="text-white text-xl w-3/4 text-normal">Lorem ipsum, dolor sit amet consectetur adipisicing elit
+            </div>
+        </div>
     </div>
-    <div class="w-1/2 flex justify-center items-center">
-
+    <div class="w-1/2 flex flex-col justify-center p-24">
+        <div class="text-left align-start text-xl mb-4">
+            Authorized Login
+        </div>
         <form method="post">
             {{form.non_field_errors}}
             {%csrf_token%}
             {%for field in form%}
-            <div class="my-4 flex flex-col">
-                <div class="mb-1">{{field.label}}</div>
+            <div class="mb-4 border-0 bg-white rounded-lg flex flex-col p-1 pl-4">
+                <div class="text-gray-600">{{field.label}}</div>
                 {{field}}
                 {%if field.errors%}
                 <ol class="list-disc ml-6 text-sm text-red-500">
@@ -25,7 +33,7 @@
             </div>
             {%endfor%}
             <button type="submit"
-                class="text-center bg-purple-500 text-white w-full rounded-md py-2 hover:bg-purple-400 transition ease-in-out duration-300">
+                class="text-center bg-black text-white w-full rounded-md py-2 hover:bg-gray-400 transition ease-in-out duration-300">
                 Login</button>
         </form>
     </div>

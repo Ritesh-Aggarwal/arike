@@ -13,14 +13,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from app.views import (CreateDiseaseHistoryView, CreateMemberView, CreateTreatmentView, CreateUserView, DeleteDiseaseHistoryView, DeleteMemberView, DeleteTreatmentView, DeleteUserView, DetailUserView,
-                       GenericFacilityCreateView, GenericFacilityDeleteView,
-                       GenericFacilityDetailView, GenericFacilityUpdateView,
-                       GenericFacilityView, GenericPatientCreateView,
-                       GenericPatientDeleteView, GenericPatientDetailView,
-                       GenericPatientUpdateView, GenericPatientView, ListDiseaseHistoryView, ListFamilyView, ListTreatmentView, LoginView,
-                       ProfileView, UpdateDiseaseHistoryView, UpdateMemberView, UpdatePasswordView, UpdateProfileView, UpdateTreatmentView,
-                       UpdateUserView, UsersListView)
+from app.views import (AgendaView, CreateDiseaseHistoryView, CreateMemberView,
+                       CreateTreatmentView, CreateUserView,
+                       CreateVisitSchedule, DeleteDiseaseHistoryView,
+                       DeleteMemberView, DeleteTreatmentView, DeleteUserView, DeleteVisitView,
+                       DetailUserView, GenericFacilityCreateView,
+                       GenericFacilityDeleteView, GenericFacilityDetailView,
+                       GenericFacilityUpdateView, GenericFacilityView,
+                       GenericPatientCreateView, GenericPatientDeleteView,
+                       GenericPatientDetailView, GenericPatientUpdateView,
+                       GenericPatientView, ListDiseaseHistoryView,
+                       ListFamilyView, ListScheduleView, ListTreatmentView, ListVisitHistoryView,
+                       LoginView, ProfileView, UpdateDiseaseHistoryView,
+                       UpdateMemberView, UpdatePasswordView, UpdateProfileView,
+                       UpdateTreatmentView, UpdateUserView, UsersListView)
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import path
@@ -73,4 +79,14 @@ urlpatterns += [
     path('patient/<int:patient>/add-treatment',CreateTreatmentView.as_view(), name='patient'),
     path('update-treatment/<pk>',UpdateTreatmentView.as_view(), name='patient'),
     path('delete-treatment/<pk>',DeleteTreatmentView.as_view(), name='patient'),
+    path('patient/<pk>/visits',ListVisitHistoryView.as_view(), name='patient'),
 ]
+
+urlpatterns += [
+    path('schedule',ListScheduleView.as_view(), name='schedule'),
+    path('schedule-visit',CreateVisitSchedule.as_view(), name='schedule'),
+    path('agenda',AgendaView.as_view(), name='schedule'),
+    path('delete-visit/<pk>',DeleteVisitView.as_view(), name='schedule'),
+]
+
+

@@ -1,0 +1,28 @@
+{% extends "dashboard.html" %}
+{%block page_content%}
+<div class="flex justify-between items-center mb-6">
+    <div class="text-3xl font-semibold ">Patient Visits</div>
+    <a href="/schedule-visit" class="border-2 rounded-md border-black bg-black text-white px-6 py-1 ">New</a>
+</div>
+<div class="font-semibold text-xl">{{patient.full_name}}</div>
+<div class="text-gray-500 mb-4">{{patient.address}}</div>
+<div class="grid grid-cols-3 gap-4">
+    {%for obj in objects %}
+    <div class="rounded-lg bg-white p-4">
+        <div class="flex justify-between mb-4">
+            <div class="flex flex-col">
+                <div class="font-semibold">Visit by</div>
+                <div class="">{{obj.scheduled_by}}</div>
+            </div>
+            <div class="flex flex-col">
+                <div class="font-semibold">Visit date</div>
+                <div class="">{{obj.visit_at|date}}</div>
+            </div>
+        </div>
+        <a href="/visit/{{obj.id}}" class="border-2 rounded-md border-black bg-black text-white px-6 py-1 ">Visit
+            details</a>
+
+    </div>
+    {%endfor%}
+</div>
+{%endblock%}

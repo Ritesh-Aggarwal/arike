@@ -1,0 +1,36 @@
+{% extends "dashboard.html" %}
+{%block page_content%}
+<div class="flex justify-between items-center mb-6">
+        <div class="text-3xl font-semibold ">Schedule</div>
+        <div class="flex">
+                <a href="/agenda" class="border-2 rounded-md border-black  px-6 py-1 mr-4">Agenda</a>
+                <a href="schedule-visit" class="border-2 rounded-md border-black bg-black text-white px-6 py-1 ">New</a>
+        </div>
+</div>
+<div class="grid grid-cols-3 gap-4">
+        {%for object in objects %}
+        <a href="/patient/{{object.id}}" class="overflow-clip">
+                <div class="border-0 bg-white rounded-lg p-4 min-h-full flex flex-col justify-start">
+                        <div class="">
+                                <div class="flex items-center justify-between">
+                                        <div class="text-lg font-semibold">{{object}}</div>
+                                        <div class="text-gray-600">{{object.ward}}</div>
+                                </div>
+                                <div class="text-gray-600">{{object.address}},
+                                        {{object.landmark}}</div>
+                        </div>
+                        <div class="list-disc text-gray-500">
+                                {%for treatment in treatments%}
+                                {%if treatment.patient == object%}
+                                <li>
+                                        {{treatment.get_care_type_display}}
+                                </li>
+                                {%endif%}
+                                {%endfor%}
+                        </div>
+                </div>
+
+        </a>
+        {%endfor%}
+</div>
+{%endblock%}
