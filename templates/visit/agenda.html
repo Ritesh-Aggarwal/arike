@@ -17,7 +17,6 @@
                 <div> {{ visits.grouper|date }}</div>
                 {%endif%}
                 <span class="ml-4 text-gray-500">{{visits.list|length}} visits</span>
-
         </div>
         <div class="mb-4 grid grid-cols-3 gap-4">
                 {% for obj in visits.list %}
@@ -36,7 +35,7 @@
                                 <div class="flex justify-around items-center">
                                         <a href="/delete-visit/{{obj.id}}"
                                                 class="border-2 mr-4 rounded-md border-black px-6 py-1">Unschedule</a>
-                                        <a href="#"
+                                        <a href="/patient/visit/{{obj.id}}"
                                                 class="border-2 rounded-md border-black bg-black text-white px-6 py-1">Visit</a>
                                 </div>
                         </div>

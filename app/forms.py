@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from app.choices import (FACILITY_CHOICES, GENDER_CHOICES, REVERSE_CARE_TYPE,
                          SUB_CARE_TYPES)
 from app.models import (CustomUser, Disease, Facility, FamilyDetail, Patient,
-                        PatientDisease, Treatment, VisitSchedule, Ward)
+                        PatientDisease, Treatment, VisitDetails, VisitSchedule, Ward)
 
 
 # from .models import CustomUser, Facility
@@ -114,9 +114,16 @@ class VisitScheduleCreateForm(forms.ModelForm):
                            (attrs={'placeholder':'hh:mm:ss'}))
     class Meta:
         model = VisitSchedule
-        exclude = ('scheduled_by',)
+        exclude = ('scheduled_by','visit_details',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'focus:outline-none w-full'
+
+class HealthInfoForm(forms.ModelForm):
+
+    class Meta:
+        model = VisitDetails
+        exclude = ()
+        # fields = "__all__"

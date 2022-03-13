@@ -5,7 +5,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 
 from app.choices import (CARE_TYPES, FACILITY_CHOICES, GENDER_CHOICES,
-                         LOCAL_BODY_CHOICES, RELATION_CHOICES,
+                         LOCAL_BODY_CHOICES, PALLIATIVE_PHASE_CHOICES, RELATION_CHOICES,
                          REVERSE_LSG_CHOICES, SUB_CARE_TYPES)
 
 phone_number_regex = RegexValidator(
@@ -198,6 +198,21 @@ class Treatment(models.Model):
     #         output += ","
     #     return f"{output[:-1]}"
 
+
+class VisitDetails(models.Model):
+    palliative_phase = models.IntegerField(choices=PALLIATIVE_PHASE_CHOICES,null=True,blank=True)
+    blood_pressure = models.IntegerField(null=True,blank=True)
+    pulse = models.IntegerField(null=True,blank=True)
+    General_Random_Blood_Sugar = models.IntegerField(null=True,blank=True)
+    personal_hygiene = models.CharField(max_length=255,null=True,blank=True)
+    mouth_hygiene = models.CharField(max_length=255,null=True,blank=True)
+    pubic_hygiene = models.CharField(max_length=255,null=True,blank=True)
+    systemic_examination = models.CharField(max_length=255,null=True,blank=True)
+    patient_at_peace = models.BooleanField(default=False)
+    pain = models.BooleanField(default=False)
+    note = models.CharField(max_length=255,null=True,blank=True)
+    symptoms = models.CharField(max_length=255,null=True,blank=True)
+
 class VisitSchedule(models.Model):
     visit_at = models.DateTimeField()
     duration = models.DurationField()
@@ -205,3 +220,11 @@ class VisitSchedule(models.Model):
         Patient, on_delete=models.CASCADE, null=False, blank=False
     )
     scheduled_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
+    visit_details = models.ForeignKey(
+        VisitDetails,
+        on_delete=models.CASCADE,
+        null=True, blank=True
+    )
+
+
+

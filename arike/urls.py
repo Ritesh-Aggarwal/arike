@@ -24,7 +24,7 @@ from app.views import (AgendaView, CreateDiseaseHistoryView, CreateMemberView,
                        GenericPatientDetailView, GenericPatientUpdateView,
                        GenericPatientView, ListDiseaseHistoryView,
                        ListFamilyView, ListScheduleView, ListTreatmentView, ListVisitHistoryView,
-                       LoginView, ProfileView, UpdateDiseaseHistoryView,
+                       LoginView, PatientVisitView, ProfileView, UpdateDiseaseHistoryView, UpdateHealthInfoView,
                        UpdateMemberView, UpdatePasswordView, UpdateProfileView,
                        UpdateTreatmentView, UpdateUserView, UsersListView)
 from django.contrib import admin
@@ -87,6 +87,8 @@ urlpatterns += [
     path('schedule-visit',CreateVisitSchedule.as_view(), name='schedule'),
     path('agenda',AgendaView.as_view(), name='schedule'),
     path('delete-visit/<pk>',DeleteVisitView.as_view(), name='schedule'),
+    path('patient/visit/<pk>',PatientVisitView.as_view(), name='schedule'),
+    path('patient/visit/<int:visit>/health-info',UpdateHealthInfoView.as_view(), name='schedule'),
 ]
 
 

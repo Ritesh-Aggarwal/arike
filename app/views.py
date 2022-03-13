@@ -11,10 +11,10 @@ from django.views.generic.list import ListView
 
 from app.forms import (CustomUserCreationForm, CustomUserUpdateForm,
                        DiseaseHistoryCreateForm, FacilityCreateForm,
-                       FamilyCreateForm, PatientCreateForm,
+                       FamilyCreateForm, HealthInfoForm, PatientCreateForm,
                        TreatementCreateForm, VisitScheduleCreateForm)
 from app.models import (CustomUser, Facility, FamilyDetail, Patient,
-                        PatientDisease,  Treatment, VisitSchedule)
+                        PatientDisease,  Treatment, VisitDetails, VisitSchedule)
 
 
 # Create your views here.
@@ -311,7 +311,7 @@ class ListVisitHistoryView(ListView):
         pk = self.kwargs["pk"]
         context['patient'] = Patient.objects.get(pk=pk)
         return context
-        
+
     def get_queryset(self):
         pk = self.kwargs["pk"]
         qs = VisitSchedule.objects.filter(patient=pk)
@@ -372,6 +372,8 @@ class CreateVisitSchedule(CreateView):
     def form_valid(self, form):
         self.object = form.save()
         self.object.scheduled_by = self.request.user
+        details = VisitDetails.objects.create(General_Random_Blood_Sugar=0)
+        self.object.visit_details = details
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
@@ -379,5 +381,25 @@ class DeleteVisitView(DeleteView):
     model = VisitSchedule
     template_name = "visit/delete.html"
     success_url = "/agenda"
+
+########################################################################################
+########################################################################################
+
+class PatientVisitView(DetailView):
+    template_name = "visit/menu.html"
+    model = VisitSchedule
+
+class UpdateHealthInfoView(UpdateView):
+    model = VisitDetails
+    form_class = HealthInfoForm
+    template_name = "visit/health.html"
+    success_url = "/agenda"
+    
+    def get_object(self):
+        pk = self.kwargs["visit"]
+        visit = VisitSchedule.objects.get(pk=pk)
+        print(visit.visit_details)
+        obj =  VisitDetails.objects.get(pk=visit.visit_details.id)
+        return obj
 
 ########################################################################################
