@@ -226,5 +226,14 @@ class VisitSchedule(models.Model):
         null=True, blank=True
     )
 
+class TreatmentNotes(models.Model):
+    note = models.CharField(max_length=255)
+    treatment = models.ForeignKey(
+        Treatment, on_delete=models.CASCADE, null=True, blank=True
+    )
+    visit = models.ForeignKey(
+        VisitSchedule, on_delete=models.CASCADE, null=True, blank=True
+    )
+
 
 

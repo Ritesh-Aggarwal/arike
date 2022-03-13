@@ -12,9 +12,9 @@ from django.views.generic.list import ListView
 from app.forms import (CustomUserCreationForm, CustomUserUpdateForm,
                        DiseaseHistoryCreateForm, FacilityCreateForm,
                        FamilyCreateForm, HealthInfoForm, PatientCreateForm,
-                       TreatementCreateForm, VisitScheduleCreateForm)
+                       TreatementCreateForm, TreatmentNoteForm, VisitScheduleCreateForm)
 from app.models import (CustomUser, Facility, FamilyDetail, Patient,
-                        PatientDisease,  Treatment, VisitDetails, VisitSchedule)
+                        PatientDisease,  Treatment, TreatmentNotes, VisitDetails, VisitSchedule)
 
 
 # Create your views here.
@@ -272,6 +272,15 @@ class ListTreatmentView(ListView):
         qs = Treatment.objects.filter(patient=pk)
         return qs
 
+class DetailTreatmentView(DetailView):
+    model = Treatment
+    template_name = "treatment/detail.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs["pk"]
+        context['notes'] = TreatmentNotes.objects.filter(treatment=pk)
+        return context
 
 class CreateTreatmentView(CreateView):
     model = Treatment
@@ -399,8 +408,52 @@ class UpdateHealthInfoView(UpdateView):
     def get_object(self):
         pk = self.kwargs["visit"]
         visit = VisitSchedule.objects.get(pk=pk)
-        print(visit.visit_details)
         obj =  VisitDetails.objects.get(pk=visit.visit_details.id)
         return obj
+
+########################################################################################
+########################################################################################
+
+class ListActiveTreatmentView(ListView):
+    model = Treatment
+    template_name="visit/treatments.html"
+    context_object_name = "objects"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs["visit"]
+        context['visit'] = pk
+        context['patient'] = context["objects"][0].patient
+        return context
+
+    def get_queryset(self):
+        pk = self.kwargs["visit"]
+        visit = VisitSchedule.objects.get(pk=pk)
+        qs = Treatment.objects.filter(patient=visit.patient)
+        return qs
+
+class AddTreatementNoteView(CreateView):
+    model = TreatmentNotes
+    form_class = TreatmentNoteForm
+    template_name = "visit/create_note.html"
+    success_url = '/schedule'
+
+    def form_valid(self, form):
+        self.object = form.save()
+        pk = self.kwargs["pk"]
+        visit = self.kwargs["visit"]
+        treatment = Treatment.objects.get(pk=pk)
+        visit = VisitSchedule.objects.get(pk=visit)
+        self.object.treatment = treatment
+        self.object.visit = visit
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs["pk"]
+        treatment = Treatment.objects.get(pk=pk)
+        context['treatment'] = treatment
+        return context
 
 ########################################################################################

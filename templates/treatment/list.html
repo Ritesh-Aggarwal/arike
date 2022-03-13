@@ -10,7 +10,8 @@
 <div class="grid grid-cols-2 gap-4">
         {%for object in objects %}
         <div class="overflow-clip">
-                <div class="border-0 bg-white rounded-t-lg p-4 flex flex-col justify-between">
+                <a href="/patient/{{patient.id}}/treatment/{{object.id}}"
+                        class="border-0 bg-white rounded-t-lg p-4 flex flex-col justify-between">
                         <div class="flex items-center justify-between">
                                 <div class="text-lg font-semibold">{{object.get_care_type_display}}</div>
                         </div>
@@ -37,7 +38,7 @@
                                         {{object.description}}
                                 </div>
                         </div>
-                </div>
+                </a>
                 <div class="rounded-b-lg  font-semibold bg-white p-4 border-0 mt-0.5">
                         <div class="flex justify-end items-center">
                                 <a href="/delete-treatment/{{object.id}}"

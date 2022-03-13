@@ -13,16 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from app.views import (AgendaView, CreateDiseaseHistoryView, CreateMemberView,
+from app.views import (AddTreatementNoteView, AgendaView, CreateDiseaseHistoryView, CreateMemberView,
                        CreateTreatmentView, CreateUserView,
                        CreateVisitSchedule, DeleteDiseaseHistoryView,
-                       DeleteMemberView, DeleteTreatmentView, DeleteUserView, DeleteVisitView,
+                       DeleteMemberView, DeleteTreatmentView, DeleteUserView, DeleteVisitView, DetailTreatmentView,
                        DetailUserView, GenericFacilityCreateView,
                        GenericFacilityDeleteView, GenericFacilityDetailView,
                        GenericFacilityUpdateView, GenericFacilityView,
                        GenericPatientCreateView, GenericPatientDeleteView,
                        GenericPatientDetailView, GenericPatientUpdateView,
-                       GenericPatientView, ListDiseaseHistoryView,
+                       GenericPatientView, ListActiveTreatmentView, ListDiseaseHistoryView,
                        ListFamilyView, ListScheduleView, ListTreatmentView, ListVisitHistoryView,
                        LoginView, PatientVisitView, ProfileView, UpdateDiseaseHistoryView, UpdateHealthInfoView,
                        UpdateMemberView, UpdatePasswordView, UpdateProfileView,
@@ -76,6 +76,7 @@ urlpatterns += [
 
 urlpatterns += [
     path('patient/<pk>/treatments',ListTreatmentView.as_view(), name='patient'),
+    path('patient/<int:patient>/treatment/<pk>',DetailTreatmentView.as_view(), name='patient'),
     path('patient/<int:patient>/add-treatment',CreateTreatmentView.as_view(), name='patient'),
     path('update-treatment/<pk>',UpdateTreatmentView.as_view(), name='patient'),
     path('delete-treatment/<pk>',DeleteTreatmentView.as_view(), name='patient'),
@@ -89,6 +90,8 @@ urlpatterns += [
     path('delete-visit/<pk>',DeleteVisitView.as_view(), name='schedule'),
     path('patient/visit/<pk>',PatientVisitView.as_view(), name='schedule'),
     path('patient/visit/<int:visit>/health-info',UpdateHealthInfoView.as_view(), name='schedule'),
+    path('patient/visit/<int:visit>/active-treatments',ListActiveTreatmentView.as_view(), name='schedule'),
+    path('patient/visit/<int:visit>/active-treatments/<pk>/add-note',AddTreatementNoteView.as_view(), name='schedule'),
 ]
 
 

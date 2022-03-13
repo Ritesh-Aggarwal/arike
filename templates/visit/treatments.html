@@ -1,0 +1,55 @@
+{% extends "dashboard.html" %}
+{%block page_content%}
+<div class="flex justify-between items-center mb-6">
+    <div class="text-3xl font-semibold ">Active Treatments</div>
+    <a href="/patient/{{patient.id}}/add-treatment"
+        class="border-2 rounded-md border-black bg-black text-white px-6 py-1 ">Add</a>
+</div>
+<div class="grid grid-cols-2 gap-4">
+    {%for object in objects %}
+    <div class="overflow-clip">
+        <div class="border-0 bg-white rounded-t-lg p-4 flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+                <div class="text-lg font-semibold">{{object.get_care_type_display}}</div>
+                <a href="/patient/visit/{{visit}}/active-treatments/{{object.id}}/add-note"
+                    class="border-2 rounded-md border-black bg-black text-white px-6 py-1 ">Add
+                    note</a>
+            </div>
+            <div class="text-gray-600">{{object.pretty_date.created}}</div>
+            <!-- <div class="text-gray-600">{{object.get_sub_care_type}}</div> -->
+            <div class="mt-2 grid grid-cols-2 gap-2">
+                <div class="font-semibold">
+                    Given by
+                    <div class="font-normal">
+                        {{object.given_by}}
+                    </div>
+                </div>
+                <div class="font-semibold">
+                    Last Updated
+                    <div class="font-normal">
+                        {{object.pretty_date.last}}
+                    </div>
+                </div>
+
+            </div>
+            <div class="font-semibold">
+                Description
+                <div class="font-normal">
+                    {{object.description}}
+                </div>
+            </div>
+        </div>
+        <div class="rounded-b-lg  font-semibold bg-white p-4 border-0 mt-0.5">
+            <div class="flex justify-end items-center">
+                <a href="/patient/{{patient.id}}/treatment/{{object.id}}"
+                    class="mr-4 border-2 rounded-md border-black bg-black text-white px-6 py-1">View</a>
+                <a href="/delete-treatment/{{object.id}}"
+                    class="border-2 mr-4 rounded-md border-black px-6 py-1">Delete</a>
+                <a href="/update-treatment/{{object.id}}"
+                    class="border-2 rounded-md border-black bg-black text-white px-6 py-1">Edit</a>
+            </div>
+        </div>
+    </div>
+    {%endfor%}
+</div>
+{%endblock%}

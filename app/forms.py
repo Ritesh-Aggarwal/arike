@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from app.choices import (FACILITY_CHOICES, GENDER_CHOICES, REVERSE_CARE_TYPE,
                          SUB_CARE_TYPES)
 from app.models import (CustomUser, Disease, Facility, FamilyDetail, Patient,
-                        PatientDisease, Treatment, VisitDetails, VisitSchedule, Ward)
+                        PatientDisease, Treatment, TreatmentNotes, VisitDetails, VisitSchedule, Ward)
 
 
 # from .models import CustomUser, Facility
@@ -126,4 +126,9 @@ class HealthInfoForm(forms.ModelForm):
     class Meta:
         model = VisitDetails
         exclude = ()
-        # fields = "__all__"
+
+class TreatmentNoteForm(forms.ModelForm):
+    note = forms.CharField(widget=forms.Textarea(attrs={'cols': 80, 'rows': 6}))
+    class Meta:
+        model = TreatmentNotes
+        fields = ('note',)
