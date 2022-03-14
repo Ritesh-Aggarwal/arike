@@ -470,7 +470,8 @@ class ListActiveTreatmentView(RoleRequiredMixin,ListView):
         context = super().get_context_data(**kwargs)
         pk = self.kwargs["visit"]
         context['visit'] = pk
-        context['patient'] = context["objects"][0].patient
+        if context['objects'].exists():
+            context['patient'] = context["objects"][0].patient
         return context
 
     def get_queryset(self):
