@@ -13,6 +13,7 @@ from app.forms import (CustomUserCreationForm, CustomUserUpdateForm,
                        DiseaseHistoryCreateForm, FacilityCreateForm,
                        FamilyCreateForm, HealthInfoForm, PatientCreateForm,
                        TreatementCreateForm, TreatmentNoteForm, VisitScheduleCreateForm)
+from app.mixins import RoleRequiredMixin
 from app.models import (CustomUser, Facility, FamilyDetail, Patient,
                         PatientDisease,  Treatment, TreatmentNotes, VisitDetails, VisitSchedule)
 
@@ -23,14 +24,16 @@ class UserLoginView(LoginView):
     template_name = "registration/login.html"
     success_url = '/profile'
 ########################################################################################
-class CreateUserView(CreateView):
+class CreateUserView(RoleRequiredMixin,CreateView):
     model = CustomUser
+    user_role_required = [30]
     template_name = 'users/create.html'
     form_class = CustomUserCreationForm
     success_url = '/users'
 
-class UpdateUserView(UpdateView):
+class UpdateUserView(RoleRequiredMixin,UpdateView):
     model = CustomUser
+    user_role_required = [30]
     template_name = 'users/update.html'
     form_class = CustomUserUpdateForm
     success_url = '/users'
@@ -39,8 +42,9 @@ class UpdateUserView(UpdateView):
         pk = self.kwargs["pk"]
         return f"/user/{pk}" 
 
-class DetailUserView(DetailView):
+class DetailUserView(RoleRequiredMixin,DetailView):
     model = CustomUser
+    user_role_required = [30]
     template_name = 'users/detail.html'
     context_object_name = "object"
 
@@ -49,16 +53,18 @@ class DetailUserView(DetailView):
         qs = CustomUser.objects.filter(pk=pk)
         return qs
 
-class UsersListView(ListView):
+class UsersListView(RoleRequiredMixin,ListView):
     model = CustomUser
+    user_role_required = [30]
     template_name = "users/list.html"
     context_object_name = "users"
 
     def get_queryset(self):
         return CustomUser.objects.filter().exclude(role=30)
 
-class DeleteUserView(DeleteView):
+class DeleteUserView(RoleRequiredMixin,DeleteView):
     model = CustomUser
+    user_role_required = [30]
     template_name = "users/delete.html"
     success_url = "/users"
 ########################################################################################
@@ -91,13 +97,15 @@ class UpdatePasswordView(LoginRequiredMixin,UpdateView):
 ########################################################################################
 ########################################################################################
 
-class GenericFacilityView(ListView):
+class GenericFacilityView(RoleRequiredMixin,ListView):
     model = Facility
+    user_role_required = [30]
     template_name = "facility/list.html"
     context_object_name = "facs"
 
-class GenericFacilityCreateView(CreateView):
+class GenericFacilityCreateView(RoleRequiredMixin,CreateView):
     model = Facility
+    user_role_required = [30]
     form_class = FacilityCreateForm
     template_name = "facility/create.html"
     success_url = "/facilities"
@@ -106,12 +114,14 @@ class GenericFacilityCreateView(CreateView):
         self.object = form.save()
         return HttpResponseRedirect(self.get_success_url())
 
-class GenericFacilityDetailView(DetailView):
+class GenericFacilityDetailView(RoleRequiredMixin,DetailView):
     model = Facility
+    user_role_required = [30]
     template_name = "facility/detail.html"
 
-class GenericFacilityUpdateView(UpdateView):
+class GenericFacilityUpdateView(RoleRequiredMixin,UpdateView):
     model = Facility
+    user_role_required = [30]
     form_class = FacilityCreateForm
     template_name = "facility/update.html"
     # success_url = "/facilities"
@@ -120,33 +130,30 @@ class GenericFacilityUpdateView(UpdateView):
         pk = self.kwargs["pk"]
         return f"/facility/{pk}" 
 
-class GenericFacilityDeleteView(DeleteView):
+class GenericFacilityDeleteView(RoleRequiredMixin,DeleteView):
     model = Facility
+    user_role_required = [30]
     template_name = "facility/delete.html"
     success_url = "/facilities"
 ########################################################################################
 ########################################################################################
 
-class GenericPatientView(ListView):
+class GenericPatientView(RoleRequiredMixin,ListView):
     model = Patient
     template_name = "patient/list.html"
     context_object_name = "patients"
 
-class GenericPatientCreateView(CreateView):
+class GenericPatientCreateView(RoleRequiredMixin,CreateView):
     model = Patient
     form_class = PatientCreateForm
     template_name = "patient/create.html"
     success_url = "/patients"
 
-#     def form_valid(self, form):
-#         self.object = form.save()
-#         return HttpResponseRedirect(self.get_success_url())
-
-class GenericPatientDetailView(DetailView):
+class GenericPatientDetailView(RoleRequiredMixin,DetailView):
     model = Patient
     template_name = "patient/detail.html"
 
-class GenericPatientUpdateView(UpdateView):
+class GenericPatientUpdateView(RoleRequiredMixin,UpdateView):
     model = Patient
     form_class = PatientCreateForm
     template_name = "patient/update.html"
@@ -155,14 +162,14 @@ class GenericPatientUpdateView(UpdateView):
         pk = self.kwargs["pk"]
         return f"/patient/{pk}"        
     
-class GenericPatientDeleteView(DeleteView):
+class GenericPatientDeleteView(RoleRequiredMixin,DeleteView):
     model = Patient
     template_name = "patient/delete.html"
     success_url = "/patients"
 
 ########################################################################################
 ########################################################################################
-class ListFamilyView(ListView):
+class ListFamilyView(RoleRequiredMixin,ListView):
     model = FamilyDetail
     template_name = "family/list.html"
     context_object_name = "objects"
@@ -178,7 +185,7 @@ class ListFamilyView(ListView):
         qs = FamilyDetail.objects.filter(patient=pk)
         return qs
 
-class CreateMemberView(CreateView):
+class CreateMemberView(RoleRequiredMixin,CreateView):
     model = FamilyDetail
     form_class = FamilyCreateForm
     template_name = "family/create.html"
@@ -194,12 +201,12 @@ class CreateMemberView(CreateView):
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
-class DeleteMemberView(DeleteView):
+class DeleteMemberView(RoleRequiredMixin,DeleteView):
     model = FamilyDetail
     template_name = "family/delete.html"
     success_url = "/patients"
 
-class UpdateMemberView(UpdateView):
+class UpdateMemberView(RoleRequiredMixin,UpdateView):
     model = FamilyDetail
     form_class = FamilyCreateForm
     template_name = "family/update.html"
@@ -209,7 +216,7 @@ class UpdateMemberView(UpdateView):
 ########################################################################################
 ########################################################################################
 
-class ListDiseaseHistoryView(ListView):
+class ListDiseaseHistoryView(RoleRequiredMixin,ListView):
     model = PatientDisease
     template_name = "patient_disease/list.html"
     context_object_name = "objects"
@@ -226,7 +233,7 @@ class ListDiseaseHistoryView(ListView):
         return qs
 
 
-class CreateDiseaseHistoryView(CreateView):
+class CreateDiseaseHistoryView(RoleRequiredMixin,CreateView):
     model = PatientDisease
     form_class = DiseaseHistoryCreateForm
     template_name = "patient_disease/create.html"
@@ -243,12 +250,12 @@ class CreateDiseaseHistoryView(CreateView):
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
-class DeleteDiseaseHistoryView(DeleteView):
+class DeleteDiseaseHistoryView(RoleRequiredMixin,DeleteView):
     model = PatientDisease
     template_name = "patient_disease/delete.html"
     success_url = "/patients"
 
-class UpdateDiseaseHistoryView(UpdateView):
+class UpdateDiseaseHistoryView(RoleRequiredMixin,UpdateView):
     model = PatientDisease
     form_class = DiseaseHistoryCreateForm
     template_name = "patient_disease/update.html"
@@ -256,7 +263,7 @@ class UpdateDiseaseHistoryView(UpdateView):
 ########################################################################################
 ########################################################################################
 
-class ListTreatmentView(ListView):
+class ListTreatmentView(RoleRequiredMixin,ListView):
     model = Treatment
     template_name = "treatment/list.html"
     context_object_name = "objects"
@@ -272,7 +279,7 @@ class ListTreatmentView(ListView):
         qs = Treatment.objects.filter(patient=pk)
         return qs
 
-class DetailTreatmentView(DetailView):
+class DetailTreatmentView(RoleRequiredMixin,DetailView):
     model = Treatment
     template_name = "treatment/detail.html"
 
@@ -282,7 +289,7 @@ class DetailTreatmentView(DetailView):
         context['notes'] = TreatmentNotes.objects.filter(treatment=pk)
         return context
 
-class CreateTreatmentView(CreateView):
+class CreateTreatmentView(RoleRequiredMixin,CreateView):
     model = Treatment
     form_class = TreatementCreateForm
     template_name = "treatment/create.html"
@@ -299,18 +306,18 @@ class CreateTreatmentView(CreateView):
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
-class DeleteTreatmentView(DeleteView):
+class DeleteTreatmentView(RoleRequiredMixin,DeleteView):
     model = Treatment
     template_name = "treatment/delete.html"
     success_url = "/patients"
 
-class UpdateTreatmentView(UpdateView):
+class UpdateTreatmentView(RoleRequiredMixin,UpdateView):
     model = Treatment
     form_class = TreatementCreateForm
     template_name = "treatment/update.html"
     success_url = "/patients"
 
-class ListVisitHistoryView(ListView):
+class ListVisitHistoryView(RoleRequiredMixin,ListView):
     model = VisitSchedule
     template_name = "patient/visits.html"
     context_object_name = "objects"
@@ -329,7 +336,7 @@ class ListVisitHistoryView(ListView):
 ########################################################################################
 ########################################################################################
 
-class ListScheduleView(ListView):
+class ListScheduleView(RoleRequiredMixin,ListView):
     model = Patient
     template_name = "visit/list.html"
     context_object_name = "objects"
@@ -344,7 +351,7 @@ class ListScheduleView(ListView):
         # qs = Patient.objects.filter()
         # return qs
 
-class AgendaView(ListView):
+class AgendaView(RoleRequiredMixin,ListView):
     model = VisitSchedule
     template_name = "visit/agenda.html"
     context_object_name = "objects"
@@ -363,7 +370,7 @@ class AgendaView(ListView):
         return qs
 
 
-class CreateVisitSchedule(CreateView):
+class CreateVisitSchedule(RoleRequiredMixin,CreateView):
     model = VisitSchedule
     form_class = VisitScheduleCreateForm
     template_name = "visit/create.html"
@@ -387,7 +394,7 @@ class CreateVisitSchedule(CreateView):
         context['patient'] = patient
         return context
         
-class DeleteVisitView(DeleteView):
+class DeleteVisitView(RoleRequiredMixin,DeleteView):
     model = VisitSchedule
     template_name = "visit/delete.html"
     success_url = "/agenda"
@@ -395,11 +402,11 @@ class DeleteVisitView(DeleteView):
 ########################################################################################
 ########################################################################################
 
-class PatientVisitView(DetailView):
+class PatientVisitView(RoleRequiredMixin,DetailView):
     template_name = "visit/menu.html"
     model = VisitSchedule
 
-class UpdateHealthInfoView(UpdateView):
+class UpdateHealthInfoView(RoleRequiredMixin,UpdateView):
     model = VisitDetails
     form_class = HealthInfoForm
     template_name = "visit/health.html"
@@ -414,7 +421,7 @@ class UpdateHealthInfoView(UpdateView):
 ########################################################################################
 ########################################################################################
 
-class ListActiveTreatmentView(ListView):
+class ListActiveTreatmentView(RoleRequiredMixin,ListView):
     model = Treatment
     template_name="visit/treatments.html"
     context_object_name = "objects"
@@ -432,7 +439,7 @@ class ListActiveTreatmentView(ListView):
         qs = Treatment.objects.filter(patient=visit.patient)
         return qs
 
-class AddTreatementNoteView(CreateView):
+class AddTreatementNoteView(RoleRequiredMixin,CreateView):
     model = TreatmentNotes
     form_class = TreatmentNoteForm
     template_name = "visit/create_note.html"

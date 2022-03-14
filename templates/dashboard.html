@@ -5,26 +5,29 @@
         <div class="">
             <div class="text-2xl font-bold mb-4">Arike</div>
             <div class="flex flex-col">
+                {%if user.role == 30%}
                 {% if request.resolver_match.url_name == 'facility' %}
                 <a href="/facilities" class="p-3 rounded-lg text-white bg-black">Facilities</a>
                 {%else%}
                 <a href="/facilities" class=" p-3 rounded-lg ">Facilities</a>
-                {% endif %}
-                {% if request.resolver_match.url_name == 'patient' %}
-                <a href="/patients" class="p-3 rounded-lg text-white bg-black">Patients</a>
-                {%else%}
-                <a href="/patients" class=" p-3 rounded-lg ">Patients</a>
                 {% endif %}
                 {% if request.resolver_match.url_name == 'users' %}
                 <a href="/users" class="p-3 rounded-lg text-white bg-black">Users</a>
                 {%else%}
                 <a href="/users" class=" p-3 rounded-lg ">Users</a>
                 {% endif %}
+                {%else%}
+                {% if request.resolver_match.url_name == 'patient' %}
+                <a href="/patients" class="p-3 rounded-lg text-white bg-black">Patients</a>
+                {%else%}
+                <a href="/patients" class=" p-3 rounded-lg ">Patients</a>
+                {% endif %}
                 {% if request.resolver_match.url_name == 'schedule' %}
                 <a href="/schedule" class="p-3 rounded-lg text-white bg-black">Schedule</a>
                 {%else%}
                 <a href="/schedule" class=" p-3 rounded-lg ">Schedule</a>
                 {% endif %}
+                {%endif%}
             </div>
         </div>
         <div class="border-t flex border-gray-300">
