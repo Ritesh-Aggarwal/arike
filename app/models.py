@@ -236,4 +236,10 @@ class TreatmentNotes(models.Model):
     )
 
 
+class PatientNurseModel(models.Model):
+    patient = models.ForeignKey(
+        Patient, on_delete=models.CASCADE, null=True, blank=True
+    )
+    nurse = models.ForeignKey(CustomUser,on_delete=models.CASCADE,null=True,blank=True)
+
 

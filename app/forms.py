@@ -4,13 +4,14 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from app.choices import (FACILITY_CHOICES, GENDER_CHOICES, REVERSE_CARE_TYPE,
                          SUB_CARE_TYPES)
 from app.models import (CustomUser, Disease, Facility, FamilyDetail, Patient,
-                        PatientDisease, Treatment, TreatmentNotes, VisitDetails, VisitSchedule, Ward)
+                        PatientDisease, PatientNurseModel, Treatment, TreatmentNotes, VisitDetails, VisitSchedule, Ward)
 
 
 # from .models import CustomUser, Facility
 # from django.contrib.auth.forms import PasswordChangeForm
 class CustomUserCreationForm(UserCreationForm):
     role = forms.ChoiceField(choices=CustomUser.TYPE_CHOICES, widget=forms.RadioSelect)
+    #TODO: show only PHC or CHC according to role. Dependent dropdown list: https://andrepz.medium.com/how-to-do-a-multiple-dependent-dropdown-django-form-10754cc5becc
     facility = forms.ModelChoiceField(label="",queryset=Facility.objects.all(),empty_label="Facility")
     
     class Meta:
@@ -132,3 +133,14 @@ class TreatmentNoteForm(forms.ModelForm):
     class Meta:
         model = TreatmentNotes
         fields = ('note',)
+
+class AssignNurseForm(forms.ModelForm):
+    nurse = forms.ModelChoiceField(label="",queryset=CustomUser.objects.filter(role=10),empty_label="Select from available options")
+    class Meta:
+        model = PatientNurseModel
+        exclude = ('patient',)
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'focus:outline-none w-full'

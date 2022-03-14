@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
@@ -9,13 +10,15 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.list import ListView
 
-from app.forms import (CustomUserCreationForm, CustomUserUpdateForm,
-                       DiseaseHistoryCreateForm, FacilityCreateForm,
-                       FamilyCreateForm, HealthInfoForm, PatientCreateForm,
-                       TreatementCreateForm, TreatmentNoteForm, VisitScheduleCreateForm)
+from app.forms import (AssignNurseForm, CustomUserCreationForm,
+                       CustomUserUpdateForm, DiseaseHistoryCreateForm,
+                       FacilityCreateForm, FamilyCreateForm, HealthInfoForm,
+                       PatientCreateForm, TreatementCreateForm,
+                       TreatmentNoteForm, VisitScheduleCreateForm)
 from app.mixins import RoleRequiredMixin
 from app.models import (CustomUser, Facility, FamilyDetail, Patient,
-                        PatientDisease,  Treatment, TreatmentNotes, VisitDetails, VisitSchedule)
+                        PatientDisease, PatientNurseModel, Treatment,
+                        TreatmentNotes, VisitDetails, VisitSchedule)
 
 
 # Create your views here.
@@ -343,13 +346,25 @@ class ListScheduleView(RoleRequiredMixin,ListView):
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['treatments'] = Treatment.objects.all()
+        user = self.request.user
+        assigned_patients = PatientNurseModel.objects.filter(nurse=user)
+        r = []
+        for i in assigned_patients:
+            r.append(i.patient)
+        context['treatments'] = Treatment.objects.filter(patient__in=r)
         return context
 
-    # def get_queryset(self):
-    #TODO: filter acc. to assigned patients and role
-        # qs = Patient.objects.filter()
-        # return qs
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == 10:
+            assigned_patients = PatientNurseModel.objects.filter(nurse=user)
+            r = []
+            for i in assigned_patients:
+                r.append(i.patient.id)
+            qs = Patient.objects.filter(id__in=r)
+        else:
+            qs = Patient.objects.all()
+        return qs
 
 class AgendaView(RoleRequiredMixin,ListView):
     model = VisitSchedule
@@ -377,7 +392,15 @@ class CreateVisitSchedule(RoleRequiredMixin,CreateView):
     success_url = '/schedule'
 
     def form_valid(self, form):
-        pk = self.kwargs["pk"]
+        user = self.request.user
+        pk = int(self.kwargs["pk"])
+        if user.role == 10:
+            assigned_patients = PatientNurseModel.objects.filter(nurse=user)
+            r = []
+            for i in assigned_patients:
+                r.append(i.patient.id)
+            if not (pk in r):
+                return HttpResponseRedirect('/schedule',status=400)
         patient = Patient.objects.get(pk=pk)
         self.object = form.save()
         self.object.patient = patient
@@ -389,8 +412,18 @@ class CreateVisitSchedule(RoleRequiredMixin,CreateView):
     
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        pk = self.kwargs["pk"]
-        patient = Patient.objects.get(pk=pk)
+        pk = int(self.kwargs["pk"])
+        patient = None
+        user = self.request.user
+        if user.role == 10:
+            assigned_patients = PatientNurseModel.objects.filter(nurse=user)
+            r = []
+            for i in assigned_patients:
+                r.append(i.patient.id)
+            if pk in r:
+                patient = Patient.objects.get(pk=pk)
+        else:
+            patient = Patient.objects.get(pk=pk)
         context['patient'] = patient
         return context
         
@@ -398,6 +431,11 @@ class DeleteVisitView(RoleRequiredMixin,DeleteView):
     model = VisitSchedule
     template_name = "visit/delete.html"
     success_url = "/agenda"
+
+    def get_queryset(self):
+        user = self.request.user
+        qs = VisitSchedule.objects.filter(scheduled_by=user)
+        return qs
 
 ########################################################################################
 ########################################################################################
@@ -462,5 +500,23 @@ class AddTreatementNoteView(RoleRequiredMixin,CreateView):
         treatment = Treatment.objects.get(pk=pk)
         context['treatment'] = treatment
         return context
+
+########################################################################################
+########################################################################################
+
+class AssignNurseView(RoleRequiredMixin,CreateView):
+    model = PatientNurseModel
+    user_role_required = [20]
+    success_url = '/patients'
+    form_class = AssignNurseForm
+    template_name = 'patient/assign-nurse.html'
+
+    def form_valid(self, form):
+        self.object = form.save()
+        pk = self.kwargs["pk"]
+        patient = Patient.objects.get(pk=pk)
+        self.object.patient = patient
+        self.object.save()
+        return HttpResponseRedirect(f'/patient/{pk}')
 
 ########################################################################################
