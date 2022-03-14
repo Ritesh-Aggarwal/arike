@@ -6,4 +6,45 @@
         <div class="font-semibold text-xl text-center my-2">{{user.username}}</div>
         <div class="rounded-full py-1 px-6 bg-gray-800 text-white">{{user.get_role_display}}</div>
     </div>
-    {%endblock%}
+    <div class="grid grid-cols-2 gap-4 mt-4">
+        <!-- {%for name, value in user.get_fields%}
+        {% if value %}
+        <div class="border-0 bg-white rounded-lg flex flex-col p-1 pl-4 ">
+            <div class="text-gray-600">
+                {{name}}
+            </div>
+            {{value}}
+        </div>
+        {% endif %}
+        {%endfor%} -->
+        <div class="border-0 bg-white rounded-lg flex flex-col p-1 pl-4 ">
+            <div class="text-gray-600">
+                District
+            </div>
+            {{user.district}}
+        </div>
+        <div class="border-0 bg-white rounded-lg flex flex-col p-1 pl-4">
+            <div class="text-gray-600">
+                Email
+            </div>
+            {{user.email}}
+        </div>
+        {%if user.phone_number%}
+        <div class="border-0 bg-white rounded-lg flex flex-col p-1 pl-4">
+            <div class="text-gray-600">
+                Phone number
+            </div>
+            {{user.phone_number}}
+        </div>
+        {%endif%}
+        {%if user.facility%}
+        <div class="border-0 bg-white rounded-lg flex flex-col p-1 pl-4">
+            <div class="text-gray-600">
+                Facility
+            </div>
+            {{user.facility}}
+        </div>
+        {%endif%}
+    </div>
+</div>
+{%endblock%}

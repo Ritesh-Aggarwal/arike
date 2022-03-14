@@ -4,7 +4,8 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from app.choices import (FACILITY_CHOICES, GENDER_CHOICES, REVERSE_CARE_TYPE,
                          SUB_CARE_TYPES)
 from app.models import (CustomUser, Disease, Facility, FamilyDetail, Patient,
-                        PatientDisease, PatientNurseModel, Treatment, TreatmentNotes, VisitDetails, VisitSchedule, Ward)
+                        PatientDisease, PatientNurseModel, Treatment,
+                        TreatmentNotes, VisitDetails, VisitSchedule, Ward)
 
 
 # from .models import CustomUser, Facility
@@ -24,12 +25,12 @@ class CustomUserCreationForm(UserCreationForm):
             self.fields[field].widget.attrs['class'] = 'focus:outline-none '
 
 class CustomUserUpdateForm(UserChangeForm):
-    role = forms.ChoiceField(choices=CustomUser.TYPE_CHOICES, widget=forms.RadioSelect)
-    facility = forms.ModelChoiceField(label="",queryset=Facility.objects.all(),empty_label="Facility")
+    # role = forms.ChoiceField(choices=CustomUser.TYPE_CHOICES, widget=forms.RadioSelect)
+    # facility = forms.ModelChoiceField(label="",queryset=Facility.objects.all(),empty_label="Facility")
     
     class Meta:
         model = CustomUser
-        fields = ('username', 'email','role','facility')
+        fields = ('username', 'email','phone_number',)
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

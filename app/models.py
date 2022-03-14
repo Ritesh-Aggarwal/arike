@@ -78,6 +78,13 @@ class CustomUser(AbstractUser):
         "email",
     ]
 
+    # def get_fields(self):
+    #     fields = []
+    #     for field in CustomUser._meta.fields:
+    #         if field.name in ['district','facility','email','phone_number']:
+    #             fields.append((field.name,field.value_to_string(self)))
+    #     return fields
+
     def __str__(self):
         return self.username
 

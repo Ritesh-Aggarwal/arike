@@ -36,8 +36,9 @@ urlpatterns = [
     path('',LoginView.as_view()),
     path('logout',LogoutView.as_view()),
     path('profile',ProfileView.as_view()),
-    path('update-profile',UpdateProfileView.as_view()),
-    path('update-pass',UpdatePasswordView.as_view()),]
+    # path('update-profile',UpdateProfileView.as_view()),
+    # path('update-pass',UpdatePasswordView.as_view()),
+    ]
 urlpatterns += [
     path('users',UsersListView.as_view(), name='users'),
     path('user/<pk>',DetailUserView.as_view(), name='users'),
