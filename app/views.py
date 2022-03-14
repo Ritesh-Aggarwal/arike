@@ -19,6 +19,7 @@ from app.mixins import RoleRequiredMixin
 from app.models import (CustomUser, Facility, FamilyDetail, Patient,
                         PatientDisease, PatientNurseModel, Treatment,
                         TreatmentNotes, VisitDetails, VisitSchedule)
+from app.tasks import bg_jobs
 
 
 # Create your views here.
@@ -78,6 +79,7 @@ class ProfileView(LoginRequiredMixin,DetailView):
     template_name = 'users/profile.html'
 
     def get_object(self):
+        bg_jobs.delay()
         return self.request.user
 
 class UpdateProfileView(LoginRequiredMixin,UpdateView):

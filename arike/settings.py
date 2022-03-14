@@ -137,3 +137,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL="/profile"
 LOGOUT_REDIRECT_URL= "/"
 LOGIN_URL = "/"
+
+BROKER_URL =  os.environ.get("REDIS_URL","redis://localhost:6379")
+CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL","redis://localhost:6379")
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
