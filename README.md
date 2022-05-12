@@ -1,5 +1,5 @@
-## Arike
-# Central software system for Palliative Care
+# Arike
+## Central software system for Palliative Care
 
 "Arike" is a Malayalam word that roughly translates to "Alongside" or "Besides" in English. The project caters to a system of specialized medical staff tending to patients under palliative care.
 
